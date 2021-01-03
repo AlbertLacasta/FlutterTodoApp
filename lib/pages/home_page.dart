@@ -122,10 +122,10 @@ class _HomePageState extends State<HomePage> {
                 size: 26.0,
               ),
               onPressed: () {
+                DBProvider.db.deleteAllTodos();
                 setState(() {
                   isLoading = true;
                   ++renderKey;
-                  DBProvider.db.deleteAllTodos();
                   todos = DBProvider.db.getAllTodos();
                   isLoading = false;
                 });
@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
       /******************************************************************
        * TODOS list
        ******************************************************************/
-      body: _buildTodoListView(),
+      body:_buildTodoListView(),
 
       /******************************************************************
        * Bottom sheet (Add)
@@ -158,24 +158,58 @@ class _HomePageState extends State<HomePage> {
                       height: 190,
                       child: Column(
                         children: <Widget>[
-                          TextField(
-                            controller: newTodoController,
-                            decoration: InputDecoration.collapsed(
-                              hintText: 'Enter your todo',
-                            ),
+                          SizedBox(
+                            height: 69.0,
+                            child:
+                              TextField(
+                                controller: newTodoController,
+                                decoration: InputDecoration.collapsed(
+                                  hintText: 'Enter your todo',
+                                ),
+                              ),
                           ),
-                          ElevatedButton(
-                            child: const Text('Close BottomSheet'),
-                            onPressed: () => {
-                              Navigator.pop(context),
-                              DBProvider.db.createTodo(new Todo( text: newTodoController.text, done: false)),
-                              newTodoController.text = "",
-                              setState(() {
-                                ++renderKey;
-                                todos = DBProvider.db.getAllTodos();
-                              }),
-                            }
-                          )
+                          Row(
+                            children: <Widget>[
+                              /**********************************
+                               *  Close
+                               **********************************/
+                              SizedBox(
+                                height: 19.0,
+                                width: 20.0,
+                                child: IconButton(
+                                  padding: new EdgeInsets.all(0.0),
+                                  visualDensity: VisualDensity.compact,
+                                  icon:  Icon(
+                                     Icons.close,
+                                    size: 26.0,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    newTodoController.text = "";
+                                  },
+                                ),
+                              ),
+
+                              Spacer(),
+
+                              /**********************************
+                               *  Add action
+                               **********************************/
+                              FlatButton(
+                                color: Colors.transparent,
+                                child: const Text('Add', style: TextStyle(color:  Colors.lightBlue),),
+                                onPressed: () => {
+                                  Navigator.pop(context),
+                                  DBProvider.db.createTodo(new Todo( text: newTodoController.text, done: false)),
+                                  newTodoController.text = "",
+                                  setState(() {
+                                    ++renderKey;
+                                    todos = DBProvider.db.getAllTodos();
+                                  }),
+                                }
+                              )
+                            ],
+                          ),
                         ],
                       ),
                     );
