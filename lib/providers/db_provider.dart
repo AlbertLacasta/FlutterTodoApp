@@ -44,7 +44,6 @@ class DBProvider {
   createTodo(Todo newTodo) async {
     final db = await database;
     final res = await db.insert('Todo', newTodo.toJson());
-
     return res;
   }
 
@@ -52,7 +51,6 @@ class DBProvider {
   updateTodo(int id, bool done) async {
     final db = await database;
     final res = await db.update('Todo', {"id": id, "done": done});
-
     return res;
   }
 
@@ -62,6 +60,7 @@ class DBProvider {
     await db.execute('DELETE FROM TODO');
   }
 
+  // Delete only one todo with the id
   Future<int> deleteTodo(int id) async {
     final db = await database;
     await db.delete('TODO', where: "id = ?", whereArgs: [id]);

@@ -69,9 +69,7 @@ class _ListItemState extends State<ListItem> {
                 fontWeight: FontWeight.w400
             ),
           ),
-
           Spacer(),
-
           SizedBox(
             height: 19.0,
             width: 20.0,
